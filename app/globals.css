@@ -1,0 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #FAF8F5;
+  --foreground: #2C2B28;
+}
+
+html,
+body {
+  height: 100%;
+  background-color: var(--background);
+  color: var(--foreground);
+  overflow: hidden;
+}
+
+/* Kill browser autofill colour injection */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 1000px #FAF8F5 inset;
+  -webkit-text-fill-color: #2C2B28;
+  caret-color: #2C2B28;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+input {
+  caret-color: #2C2B28;
+}
