@@ -20,7 +20,7 @@ interface ArtifactData {
   colorPalette: ColorSwatch[]
   typography:   TypeSpec[]
   principles:   string[]
-  refTerms:     string[]
+  referenceTerms:     string[]
   visionTerms:  string[]
   avoid:        string
 }
@@ -48,7 +48,7 @@ const FALLBACK: ArtifactData = {
     'Material honesty — let each component be exactly what it is, without disguise.',
     'Restraint as strength — what is omitted is as considered as what remains.',
   ],
-  refTerms:    ['minimal', 'material', 'space', 'craft', 'form', 'light'],
+  referenceTerms:    ['minimal', 'material', 'space', 'craft', 'form', 'light'],
   visionTerms: ['architecture', 'atmosphere'],
   avoid:       'Avoid decoration for its own sake, trend-chasing, and complexity that performs intelligence without earning it. This work refuses to be impressive before it is true.',
 }
@@ -806,7 +806,7 @@ export default function ArtifactCanvas({ content }: { content: ArtifactContent }
           colorPalette: d.colorPalette ?? FALLBACK.colorPalette,
           typography:   d.typography   ?? FALLBACK.typography,
           principles:   d.principles   ?? FALLBACK.principles,
-          refTerms:     d.referenceTerms ?? FALLBACK.refTerms,
+          referenceTerms:     d.referenceTerms ?? FALLBACK.referenceTerms,
           visionTerms:  d.visionTerms  ?? FALLBACK.visionTerms,
           avoid:        d.avoid        ?? FALLBACK.avoid,
         })
@@ -899,7 +899,7 @@ export default function ArtifactCanvas({ content }: { content: ArtifactContent }
             <ZoneVision    terms={data.visionTerms}      tone={tone} delay={1.6} />
 
             {/* ── Bottom band ───────────────────────────────────────────── */}
-            <ZoneReferences terms={data.refTerms}    tone={tone} delay={2.0} />
+            <ZoneReferences terms={data.referenceTerms}    tone={tone} delay={2.0} />
             <ZonePrinciples principles={data.principles} tone={tone} delay={2.4} />
             <ZoneAvoid     text={data.avoid}         tone={tone} delay={2.8} />
             <ZoneType      typography={data.typography} tone={tone} delay={3.2} />
