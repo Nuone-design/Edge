@@ -1,51 +1,88 @@
 'use client'
 
-import { useRef, useEffect } from 'react'
+import { useRef, useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
+import { useTone } from '../contexts/ToneContext'
 
-export default function EntryInput() {
-  const inputRef = useRef<HTMLInputElement>(null)
+interface EntryInputProps {
+  onSubmit: (query: string) => void
+}
+
+export default function EntryInput({ onSubmit }: EntryInputProps) {
+  const { tone }    = useTone()
+  const textareaRef = useRef<HTMLTextAreaElement>(null)
+  const [value, setValue] = useState('')
+
+  function adjustHeight() {
+    const el = textareaRef.current
+    if (!el) return
+    el.style.height = 'auto'
+    el.style.height = el.scrollHeight + 'px'
+  }
 
   useEffect(() => {
-    inputRef.current?.focus()
+    textareaRef.current?.focus()
+    adjustHeight()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  function handleChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
+    setValue(e.target.value)
+    adjustHeight()
+  }
+
+  function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault()
+      const trimmed = value.trim()
+      if (trimmed) onSubmit(trimmed)
+    }
+  }
 
   return (
     <motion.div
-      className="relative w-full max-w-xl px-6 sm:px-0"
+      className="relative w-full max-w-lg px-8 sm:px-0"
       style={{ zIndex: 20 }}
-      initial={{ opacity: 0, y: 12 }}
+      initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{
-        duration: 0.7,
-        delay: 0.3,
-        ease: [0.25, 0.1, 0.25, 1.0],
-      }}
+      exit={{ opacity: 0, y: -12, transition: { duration: 0.35, ease: 'easeIn' } }}
+      transition={{ duration: 0.8, delay: 0.4, ease: 'easeOut' }}
     >
-      <input
-        ref={inputRef}
-        type="text"
+      <textarea
+        ref={textareaRef}
+        value={value}
+        onChange={handleChange}
+        onKeyDown={handleKeyDown}
         placeholder="What are you working on?"
         aria-label="What are you working on?"
+        className="entry-input"
+        rows={1}
         spellCheck={false}
         autoComplete="off"
         autoCorrect="off"
         autoCapitalize="off"
-        className="
-          w-full block
-          text-2xl sm:text-3xl lg:text-4xl
-          font-light
-          tracking-[-0.02em]
-          leading-snug
-          text-ink
-          placeholder:text-ash placeholder:font-light
-          bg-transparent
-          border-0 border-b border-rule
-          focus:border-ash
-          outline-none focus:outline-none
-          transition-colors duration-300
-          py-3 px-0
-        "
+        style={{
+          width:         '100%',
+          display:       'block',
+          fontSize:      22,
+          fontWeight:    300,
+          letterSpacing: '-0.01em',
+          lineHeight:    1.5,
+          textAlign:     'center',
+          color:         tone.textSecondary,
+          background:    'transparent',
+          border:        'none',
+          outline:       'none',
+          resize:        'none',
+          overflow:      'hidden',
+          paddingTop:    8,
+          paddingBottom: 8,
+          fontFamily:    'inherit',
+          caretColor:    tone.caretColor,
+          transition:    'color 0.6s ease',
+          // CSS var drives ::placeholder color (can't set ::placeholder via inline style directly)
+          ['--placeholder-color' as string]: tone.textMuted,
+        }}
       />
     </motion.div>
   )
